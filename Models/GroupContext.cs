@@ -8,7 +8,7 @@ namespace TodoApi.Models
 {
     public class GroupContext : DbContext
     {
-        public GroupContext(DbContextOptions<CategoryContext> options)
+        public GroupContext(DbContextOptions<GroupContext> options)
             : base(options)
         {
         }

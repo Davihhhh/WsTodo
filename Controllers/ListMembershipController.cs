@@ -15,12 +15,13 @@ namespace ListMembershipApi.Controllers
     {
         private readonly ListMembershipContext _context;
         private readonly UserContext _contextUser;
+        private readonly ListContext _contextList;
 
-        public ListMembershipController(ListMembershipContext context, UserContext contextUser)
+        public ListMembershipController(ListMembershipContext context, UserContext contextUser, ListContext contextList)
         {
             _context = context;
             _contextUser = contextUser;
-
+            _contextList = contextList;
         }
 
         // GET: api/ListMembership
@@ -67,6 +68,31 @@ namespace ListMembershipApi.Controllers
             }
 
             return user;
+        }
+
+        // GET: api/ListMembership/{id}/List
+        [HttpGet("{id}/List")]
+        public async Task<ActionResult<List>> GetListMembershipList(int id)
+        {
+            var list = await _context.ListsMemberships.FindAsync(id);
+
+
+            List? lista;
+            if (list is not null)
+            {
+                lista = await _contextList.Lists.FindAsync(list.listId);
+            }
+            else
+            {
+                return NotFound();
+            }
+
+            if (lista == null)
+            {
+                return NotFound();
+            }
+
+            return lista;
         }
 
         // POST: api/ListMembership

@@ -29,6 +29,7 @@ builder.Services.AddDbContext<CategoryContext>(options => options.UseMySql(s, Se
 builder.Services.AddDbContext<ListContext>(options => options.UseMySql(s, ServerVersion.AutoDetect(s)));
 builder.Services.AddDbContext<UserContext>(options => options.UseMySql(s, ServerVersion.AutoDetect(s)));
 builder.Services.AddDbContext<ListMembershipContext>(options => options.UseMySql(s, ServerVersion.AutoDetect(s)));
+builder.Services.AddDbContext<GroupContext>(options => options.UseMySql(s, ServerVersion.AutoDetect(s)));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

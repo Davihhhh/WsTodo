@@ -9,7 +9,7 @@ namespace TodoApi.Models
     [Table("todos", Schema = "todoapp")]
     public class TodoItem
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string? Name { get; set; }
         [Column(TypeName = "bit")]
         public bool IsComplete { get; set; }

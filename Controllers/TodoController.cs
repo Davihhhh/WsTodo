@@ -9,11 +9,14 @@ namespace todoapi_v00.Controllers
     public class TodoController : ControllerBase
     {
         private readonly TodoContext _context;
+        private readonly CategoryContext _contextCategories;
+        private readonly ListContext _contextList;
 
-        public TodoController(TodoContext context)
+        public TodoController(TodoContext context, CategoryContext contextCategories, ListContext contextList)
         {
             _context = context;
-
+            _contextCategories = contextCategories;
+            _contextList = contextList;
         }
 
         // GET: api/todo
@@ -25,7 +28,7 @@ namespace todoapi_v00.Controllers
 
         // GET: api/todo/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TodoItem>> GetTodoItem(long id)
+        public async Task<ActionResult<TodoItem>> GetTodoItem(int id)
         {
             var todoItem = await _context.TodoItems.FindAsync(id);
 
@@ -39,15 +42,14 @@ namespace todoapi_v00.Controllers
 
         // GET: api/todo/{id}/Category
         [HttpGet("{id}/Category")]
-        public async Task<ActionResult<User>> GetListMembershipUser(int id)
+        public async Task<ActionResult<Category>> GetListMembershipCategory(int id)
         {
             var list = await _context.TodoItems.FindAsync(id);
-
 
             Category? cat;
             if (list is not null)
             {
-                cat = await _context.TodoItems.FindAsync(list.categoryId);
+                cat = await _contextCategories.Categories.FindAsync(list.CategoryId);
             }
             else
             {
@@ -62,6 +64,30 @@ namespace todoapi_v00.Controllers
             return cat;
         }
 
+        // GET: api/todo/{id}/List
+        [HttpGet("{id}/List")]
+        public async Task<ActionResult<List>> GetListMembershipList(int id)
+        {
+            var list = await _context.TodoItems.FindAsync(id);
+
+            List? ls;
+            if (list is not null)
+            {
+                ls = await _contextList.Lists.FindAsync(list.ListId);
+            }
+            else
+            {
+                return NotFound();
+            }
+
+            if (ls == null)
+            {
+                return NotFound();
+            }
+
+            return ls;
+        }
+
         // POST: api/Todo
         [HttpPost]
         public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem item)
@@ -74,7 +100,7 @@ namespace todoapi_v00.Controllers
 
         // PUT: api/Todo/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoItem(long id, TodoItem item)
+        public async Task<IActionResult> PutTodoItem(int id, TodoItem item)
         {
             if (id != item.Id)
             {
@@ -89,7 +115,7 @@ namespace todoapi_v00.Controllers
 
         // DELETE: api/Todo/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTodoItem(long id)
+        public async Task<IActionResult> DeleteTodoItem(int id)
         {
             var todoItem = await _context.TodoItems.FindAsync(id);
 
